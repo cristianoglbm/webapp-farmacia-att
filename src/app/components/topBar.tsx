@@ -1,0 +1,15 @@
+"use client";
+
+//Importando a tipagem necessária
+import { TitleProps } from "../interfaces/types";
+
+//Componente TopBar que exibe o título da página
+export default function TopBar(props: TitleProps) {
+  return (
+    <div className="fixed top-0 left-[288px] w-[calc(100vw-288px)] h-16 bg-blue-100 flex items-center justify-center px-8 shadow z-10">
+      <div className="text-blue-900 text-2xl font-bold flex justify-center items-center uppercase">
+        {props.title}
+      </div>
+    </div>
+  );
+}
