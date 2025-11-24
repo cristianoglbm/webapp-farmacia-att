@@ -22,6 +22,7 @@ Configuração do Projeto
 Clone o repositório:
 
 git clone (https://github.com/VITORHUGORDM/webapp-farmacia_att.git)
+
 cd webapp-farmacia_att
 
 Instale as dependências:
@@ -31,6 +32,12 @@ npm install # ou yarn install
 Inicie o servidor de desenvolvimento:
 
 npm run dev
+
+# Instala o Vite como dependência de desenvolvimento
+npm install --save-dev vite
+
+# Instala o plugin React para Vite
+npm install --save-dev @vitejs/plugin-react
 
     Este comando inicia o servidor de desenvolvimento Next.js. Abra http://localhost:3000 no navegador para visualizar o aplicativo.
 
