@@ -21,9 +21,9 @@ Configuração do Projeto
 
 Clone o repositório:
 
-git clone (https://github.com/VITORHUGORDM/webapp-farmacia_att.git)
+git clone (https://github.com/VITORHUGORDM/webapp-farmacia-att.git)
 
-cd webapp-farmacia_att
+cd webapp-farmacia-att
 
 Instale as dependências:
 
