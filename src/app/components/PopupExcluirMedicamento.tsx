@@ -11,7 +11,6 @@ interface PopupExcluirMedicamentoProps {
     tarja: string;
     via_consumo: string;
     mg_ml: string;
-    frequencia: string;
     alertas: string;
   } | null;
 }
@@ -56,10 +55,6 @@ export default function PopupExcluirMedicamento({
             </p>
             <p className="text-black font-bold text-lg">
               Mg/Ml: <span className="font-normal">{medicamento.mg_ml}</span>
-            </p>
-            <p className="text-black font-bold text-lg">
-              Frequência:{" "}
-              <span className="font-normal">{medicamento.frequencia}</span>
             </p>
             <p className="text-black font-bold text-lg">
               Alertas:{" "}

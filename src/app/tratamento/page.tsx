@@ -88,6 +88,15 @@ export default function PaginaTratamento() {
     setLoading(true);
     try {
       const res = await api.get("/tratamento");
+      console.log("Dados brutos da API:", res.data);
+      console.log(
+        "Quantidade de tratamentos retornados:",
+        res.data?.length || 0
+      );
+
+      if (!res.data || res.data.length === 0) {
+        console.warn("API retornou array vazio ou nulo");
+      }
       setTratamentos(
         res.data.map((t: any) => {
           let obsData = {
@@ -112,6 +121,31 @@ export default function PaginaTratamento() {
             obsData.alertas = String(rawObs || "");
           }
 
+          // Priorizar campos diretos do objeto, com fallback para JSON em Observacoes
+          const getField = (directField: any, jsonField: string) => {
+            const directValue =
+              directField ?? obsData[jsonField as keyof typeof obsData];
+            return directValue && directValue !== ""
+              ? directValue
+              : obsData[jsonField as keyof typeof obsData] || "";
+          };
+
+          console.log(
+            "Dados processados para tratamento ID",
+            t.ID ?? t.id,
+            ":",
+            {
+              t_raw: t,
+              Condicao: getField(t.Condicao ?? t.condicao, "condicao"),
+              Farmaceutico: getField(
+                t.Farmaceutico ?? t.farmaceutico,
+                "farmaceutico"
+              ),
+              Frequencia: getField(t.Frequencia ?? t.frequencia, "frequencia"),
+              obsData,
+            }
+          );
+
           return {
             id: t.ID ?? t.id,
             pacienteId:
@@ -127,9 +161,12 @@ export default function PaginaTratamento() {
               t.pacienteNome ??
               "Desconhecido",
             Diagnostico: t.Diagnostico ?? t.diagnostico,
-            Condicao: obsData.condicao,
-            Farmaceutico: obsData.farmaceutico,
-            Frequencia: obsData.frequencia,
+            Condicao: getField(t.Condicao ?? t.condicao, "condicao"),
+            Farmaceutico: getField(
+              t.Farmaceutico ?? t.farmaceutico,
+              "farmaceutico"
+            ),
+            Frequencia: getField(t.Frequencia ?? t.frequencia, "frequencia"),
             Data_inicio: t.Data_inicio ?? t.data_inicio,
             Data_termino: t.Data_termino ?? t.data_termino,
             Status: t.Status ?? t.status,
@@ -238,12 +275,21 @@ export default function PaginaTratamento() {
           Status: "Ativo",
           Observacoes: observacoesJson,
           observacoes: observacoesJson,
+          Condicao: "",
+          condicao: "",
+          Farmaceutico: "",
+          farmaceutico: "",
+          Frequencia: selectedFrequencies[medId] || "",
+          frequencia: selectedFrequencies[medId] || "",
         };
         await api.post("/tratamento", payload);
       }
 
       setIsTreatmentSelectionOpen(false);
-      fetchTratamentos();
+
+      // Pequeno delay para garantir que o backend processou
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await fetchTratamentos();
 
       if (lastMed) {
         setSuccessPopupData(lastMed);
@@ -266,6 +312,8 @@ export default function PaginaTratamento() {
         alertas: form.Observacoes,
         frequencia: form.Frequencia,
       });
+
+      console.log("Salvando tratamento com dados:", form);
 
       const payload = {
         pacienteId: Number(form.pacienteId),
@@ -297,10 +345,18 @@ export default function PaginaTratamento() {
         frequencia: form.Frequencia,
       };
 
-      await api.put(`/tratamento/${editingTratamento.id}`, payload);
+      console.log("Payload enviado para API:", payload);
+      const response = await api.put(
+        `/tratamento/${editingTratamento.id}`,
+        payload
+      );
+      console.log("Resposta da API após salvar:", response.data);
 
       setIsEditModalOpen(false);
-      fetchTratamentos();
+
+      // Pequeno delay para garantir que o backend processou
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await fetchTratamentos();
     } catch (err: any) {
       console.error("Erro ao salvar tratamento:", err);
       alert("Erro ao salvar tratamento.");
@@ -362,31 +418,33 @@ export default function PaginaTratamento() {
                 >
                   <div className="flex items-center gap-6 flex-1">
                     <UserIconSolid className="h-14 w-14 text-black" />
-
                     <div className="grid grid-cols-3 gap-8 flex-1 text-black">
                       <div className="flex flex-col">
+                        <span className="font-medium italic">Paciente:</span>
                         <span className="font-bold text-lg italic">
                           {t.pacienteNome}
                         </span>
+                        <span className="text-sm italic">Medicamento:</span>
                         <span className="text-sm italic">{t.Diagnostico}</span>
                       </div>
-
                       <div className="flex flex-col">
-                        <span className="font-medium italic">
+                        <span className="font-medium italic">Diagnóstico:</span>
+                        <span className="font-bold text-lg italic">
                           {t.Condicao || "-"}
                         </span>
+                        <span className="text-sm italic">Farmacêutico:</span>
                         <span className="text-sm italic">
                           {t.Farmaceutico || "-"}
                         </span>
-                        <span className="text-sm italic">
-                          {t.Frequencia || "-"}
-                        </span>
                       </div>
-
                       <div className="flex flex-col">
                         <span className="font-medium italic">
+                          IncioTratamento:
+                        </span>
+                        <span className="font-bold text-lg italic">
                           {formatDate(t.Data_inicio)}
                         </span>
+                        <span className="text-sm italic">FimTratamento:</span>
                         <span className="text-sm italic">
                           {formatDate(t.Data_termino)}
                         </span>

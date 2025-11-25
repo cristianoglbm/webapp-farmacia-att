@@ -103,95 +103,103 @@ export default function PaginaMedicamento() {
 
             {/* Lista de Medicamentos */}
             <div className="flex flex-col gap-6 overflow-y-auto flex-1 pr-2">
-              {filteredMedicamentos.map((med, index) => (
-                <div
-                  key={med.ID || med.id || index}
-                  className="bg-[#E5E7EB] rounded-[30px] p-6 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow"
-                >
-                  {/* Esquerda: Ícone + Informações */}
-                  <div className="flex items-center gap-8">
-                    {/* Ícone */}
-                    <div className="flex-shrink-0">
-                      {med.tipo?.toLowerCase().includes("injeção") ||
-                      med.tipo?.toLowerCase().includes("injetável") ? (
-                        <Syringe
-                          className="h-16 w-16 text-black"
-                          strokeWidth={1.5}
-                        />
-                      ) : (
-                        <Pill
-                          className="h-16 w-16 text-black"
-                          strokeWidth={1.5}
-                        />
-                      )}
-                    </div>
+              {loading ? (
+                <div className="text-center text-blue-900 mt-10 text-lg font-bold">
+                  Carregando medicamentos...
+                </div>
+              ) : (
+                <>
+                  {filteredMedicamentos.map((med, index) => (
+                    <div
+                      key={med.ID || med.id || index}
+                      className="bg-[#E5E7EB] rounded-[30px] p-6 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      {/* Esquerda: Ícone + Informações */}
+                      <div className="flex items-center gap-8">
+                        {/* Ícone */}
+                        <div className="flex-shrink-0">
+                          {med.tipo?.toLowerCase().includes("injeção") ||
+                          med.tipo?.toLowerCase().includes("injetável") ? (
+                            <Syringe
+                              className="h-16 w-16 text-black"
+                              strokeWidth={1.5}
+                            />
+                          ) : (
+                            <Pill
+                              className="h-16 w-16 text-black"
+                              strokeWidth={1.5}
+                            />
+                          )}
+                        </div>
 
-                    {/* Grid de Informações */}
-                    <div className="flex gap-16 text-base text-black">
-                      <div className="flex flex-col gap-1">
-                        <div className="font-bold italic text-lg">
-                          Medicamento:{" "}
-                          {med.nome || med.Nome_Medicamento || med.nome || ""}
-                        </div>
-                        <div className="italic">
-                          Dosagem: {med.dosagem || med.Dosagem || ""}
-                        </div>
-                        <div className="italic">
-                          Tipo: {med.tipo || med.Tipo || ""}
-                        </div>
-                        <div className="text-red-600 italic font-medium">
-                          Tarja: {med.tarja || med.Tarja || ""}
+                        {/* Grid de Informações */}
+                        <div className="flex gap-16 text-base text-black">
+                          <div className="flex flex-col gap-1">
+                            <div className="font-bold italic text-lg">
+                              Medicamento:{" "}
+                              {med.nome ||
+                                med.Nome_Medicamento ||
+                                med.nome ||
+                                ""}
+                            </div>
+                            <div className="italic">
+                              Dosagem: {med.dosagem || med.Dosagem || ""}
+                            </div>
+                            <div className="italic">
+                              Tipo: {med.tipo || med.Tipo || ""}
+                            </div>
+                            <div className="text-red-600 italic font-medium">
+                              Tarja: {med.tarja || med.Tarja || ""}
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <div className="italic">
+                              Via de consumo:{" "}
+                              {med.via_consumo ||
+                                med.Via_Consumo ||
+                                med.viaConsumo ||
+                                ""}
+                            </div>
+                            <div className="italic">
+                              Mg/Ml: {med.mg_ml || med.Mg_Ml || ""}
+                            </div>
+                            <div className="italic">
+                              Alertas: {med.alertas || med.Alertas || ""}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex flex-col gap-1">
-                        <div className="italic">
-                          Via de consumo:{" "}
-                          {med.via_consumo ||
-                            med.Via_Consumo ||
-                            med.viaConsumo ||
-                            ""}
-                        </div>
-                        <div className="italic">
-                          Mg/Ml: {med.mg_ml || med.Mg_Ml || ""}
-                        </div>
-                        <div className="italic">
-                          Frequência: {med.frequencia || med.Frequencia || ""}
-                        </div>
-                        <div className="italic">
-                          Alertas: {med.alertas || med.Alertas || ""}
-                        </div>
+
+                      {/* Direita: Ações */}
+                      <div className="flex items-center gap-4 pr-4">
+                        <button
+                          onClick={() => {
+                            setMedicamentoToEdit(med);
+                            setIsEditPopupOpen(true);
+                          }}
+                          className="text-black hover:text-gray-700 transition-colors"
+                          title="Editar"
+                        >
+                          <Pencil className="h-10 w-10" strokeWidth={2} />
+                        </button>
+
+                        <button
+                          onClick={() => handleDelete(med)}
+                          className="text-black hover:text-gray-700 transition-colors"
+                          title="Excluir"
+                        >
+                          <Trash2 className="h-10 w-10" strokeWidth={2} />
+                        </button>
                       </div>
                     </div>
-                  </div>
+                  ))}
 
-                  {/* Direita: Ações */}
-                  <div className="flex items-center gap-4 pr-4">
-                    <button
-                      onClick={() => {
-                        setMedicamentoToEdit(med);
-                        setIsEditPopupOpen(true);
-                      }}
-                      className="text-black hover:text-gray-700 transition-colors"
-                      title="Editar"
-                    >
-                      <Pencil className="h-10 w-10" strokeWidth={2} />
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(med)}
-                      className="text-black hover:text-gray-700 transition-colors"
-                      title="Excluir"
-                    >
-                      <Trash2 className="h-10 w-10" strokeWidth={2} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-
-              {filteredMedicamentos.length === 0 && !loading && (
-                <div className="text-center text-gray-500 mt-10 text-lg">
-                  Nenhum medicamento encontrado.
-                </div>
+                  {filteredMedicamentos.length === 0 && (
+                    <div className="text-center text-gray-500 mt-10 text-lg">
+                      Nenhum medicamento encontrado.
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -237,10 +245,6 @@ export default function PaginaMedicamento() {
                     mg_ml:
                       medicamentoToDelete.mg_ml ||
                       medicamentoToDelete.Mg_Ml ||
-                      "",
-                    frequencia:
-                      medicamentoToDelete.frequencia ||
-                      medicamentoToDelete.Frequencia ||
                       "",
                     alertas:
                       medicamentoToDelete.alertas ||

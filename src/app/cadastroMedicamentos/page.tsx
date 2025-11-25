@@ -27,7 +27,6 @@ export default function ModalCadastroMedicamento({
     via_consumo: "",
     mg_ml: "",
     alertas: "",
-    frequencia: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -44,7 +43,6 @@ export default function ModalCadastroMedicamento({
     tarja: "",
     mg_ml: "",
     alertas: "",
-    frequencia: "",
   });
 
   // 🔥 CARREGA OS DADOS QUANDO EDITANDO
@@ -59,7 +57,6 @@ export default function ModalCadastroMedicamento({
           via_consumo: res.data.via_consumo || res.data.Via_Consumo || "",
           mg_ml: res.data.mg_ml || res.data.Mg_Ml || "",
           alertas: res.data.alertas || res.data.Alertas || "",
-          frequencia: res.data.frequencia || res.data.Frequencia || "",
         });
       });
     } else {
@@ -72,7 +69,6 @@ export default function ModalCadastroMedicamento({
         via_consumo: "",
         mg_ml: "",
         alertas: "",
-        frequencia: "",
       });
     }
   }, [id, isOpen]);
@@ -113,9 +109,6 @@ export default function ModalCadastroMedicamento({
       dadosMedicamento.tipo = dadosMedicamento.tipo || "";
       dadosMedicamento.tarja = dadosMedicamento.tarja || "";
       dadosMedicamento.via_consumo = dadosMedicamento.via_consumo || "";
-      dadosMedicamento.frequencia = (
-        dadosMedicamento.frequencia || ""
-      ).toUpperCase();
 
       // Payload para o backend (PascalCase)
       const payload = {
@@ -126,11 +119,9 @@ export default function ModalCadastroMedicamento({
         Tarja: dadosMedicamento.tarja,
         Via_Consumo: dadosMedicamento.via_consumo,
         Via_consumo: dadosMedicamento.via_consumo,
+        viaConsumo: dadosMedicamento.via_consumo,
         Mg_Ml: dadosMedicamento.mg_ml,
         Alertas: dadosMedicamento.alertas,
-        Principio_Ativo: dadosMedicamento.frequencia,
-        principio_ativo: dadosMedicamento.frequencia,
-        Frequencia: dadosMedicamento.frequencia,
       };
 
       if (id) {
@@ -219,20 +210,6 @@ export default function ModalCadastroMedicamento({
               </div>
 
               {/* Dosagem */}
-              <div>
-                <label className="block text-sm font-medium mb-1 text-black">
-                  Dosagem
-                </label>
-                <input
-                  type="text"
-                  name="dosagem"
-                  value={form.dosagem}
-                  onChange={handleChange}
-                  required
-                  className="border border-gray-300 rounded-[10px] px-3 py-2 w-full text-black text-sm"
-                />
-              </div>
-
               {/* Tipo (Select) */}
               <div>
                 <label className="block text-sm font-medium mb-1 text-black">
@@ -330,21 +307,6 @@ export default function ModalCadastroMedicamento({
                   type="text"
                   name="mg_ml"
                   value={form.mg_ml}
-                  onChange={handleChange}
-                  required
-                  className="border border-gray-300 rounded-[10px] px-3 py-2 w-full text-black text-sm"
-                />
-              </div>
-
-              {/* Frequência */}
-              <div>
-                <label className="block text-sm font-medium mb-1 text-black">
-                  Frequência
-                </label>
-                <input
-                  type="text"
-                  name="frequencia"
-                  value={form.frequencia}
                   onChange={handleChange}
                   required
                   className="border border-gray-300 rounded-[10px] px-3 py-2 w-full text-black text-sm"

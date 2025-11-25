@@ -45,6 +45,7 @@ export interface Farmaceutico {
 }
 
 export interface Medicamento {
+  viaConsumo?: string;
   ID: number;
   id?: number;
   Nome_Medicamento?: string;
@@ -57,12 +58,8 @@ export interface Medicamento {
   Tarja?: string;
   via_consumo?: string;
   Via_Consumo?: string;
-  viaConsumo?: string;
   mg_ml?: string;
   Mg_Ml?: string;
   alertas?: string;
   Alertas?: string;
-  frequencia?: string;
-  Frequencia?: string;
-  frequencia?: string;
 }
